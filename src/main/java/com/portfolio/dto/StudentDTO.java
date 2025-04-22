@@ -1,19 +1,32 @@
 package com.portfolio.dto;
 
-import java.util.List;
+
 
 public class StudentDTO {
+		private Long id;
 	 	private String name;
 	    private String email;
 	    private String usn;
 	    private String branch;
 	    private Integer year;
-	    private PortfolioCreateDTO portfolio;
-	    private List<TeacherDTO> teachers;
 	    
 	    public StudentDTO() {
 	    	
 	    }
+	    
+	    
+
+		public Long getId() {
+			return id;
+		}
+
+
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+
 
 		public String getName() {
 			return name;
@@ -55,21 +68,6 @@ public class StudentDTO {
 			this.year = year;
 		}
 
-		public PortfolioCreateDTO getPortfolio() {
-			return portfolio;
-		}
-
-		public void setPortfolio(PortfolioCreateDTO portfolio) {
-			this.portfolio = portfolio;
-		}
-
-		public List<TeacherDTO> getTeachers() {
-			return teachers;
-		}
-
-		public void setTeachers(List<TeacherDTO> teachers) {
-			this.teachers = teachers;
-		}
 	    
 	    
 }

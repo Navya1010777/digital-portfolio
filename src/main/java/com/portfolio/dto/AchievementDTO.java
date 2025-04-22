@@ -1,15 +1,38 @@
 package com.portfolio.dto;
 
 public class AchievementDTO {
+	private Long id;
 	private String title;
     private String description;
     private String awardedBy;    // e.g., "Google", "College Name"
     private String dateReceived;
-    private PortfolioCreateDTO portfolio;
+    private Long portfolioId;
     
     public AchievementDTO()  {
     	
     }
+    
+    
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public Long getPortfolioId() {
+		return portfolioId;
+	}
+
+
+	public void setPortfolioId(Long portfolioId) {
+		this.portfolioId = portfolioId;
+	}
+
+
 	public String getTitle() {
 		return title;
 	}
@@ -33,12 +56,6 @@ public class AchievementDTO {
 	}
 	public void setDateReceived(String dateReceived) {
 		this.dateReceived = dateReceived;
-	}
-	public PortfolioCreateDTO getPortfolio() {
-		return portfolio;
-	}
-	public void setPortfolio(PortfolioCreateDTO portfolio) {
-		this.portfolio = portfolio;
 	}
     
     

@@ -5,18 +5,45 @@ import java.util.List;
 
 
 public class ProjectDTO {
+	private Long id;
 	private String title;
     private String description;
     private String techStack;     // e.g., React, Java, etc.
     private String githubLink;    // Optional: link to source code
     private String demoLink;
-    private PortfolioCreateDTO portfolio;
+    private Long portfolioId;
     private List<CommentDTO> comments;
     private List<FeedbackDTO> feedbacks;
     
     public ProjectDTO() {
 		
 	}
+    
+    
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public Long getPortfolioId() {
+		return portfolioId;
+	}
+
+
+
+	public void setPortfolioId(Long portfolioId) {
+		this.portfolioId = portfolioId;
+	}
+
+
 
 	public String getTitle() {
 		return title;
@@ -58,14 +85,7 @@ public class ProjectDTO {
 		this.demoLink = demoLink;
 	}
 
-	public PortfolioCreateDTO getPortfolio() {
-		return portfolio;
-	}
-
-	public void setPortfolio(PortfolioCreateDTO portfolio) {
-		this.portfolio = portfolio;
-	}
-
+	
 	public List<CommentDTO> getComments() {
 		return comments;
 	}

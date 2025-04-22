@@ -4,12 +4,12 @@ import java.util.List;
 
 
 public class TeacherDTO {
+	private Long id;
 	private String name;
     private String email;
     private String teacherId;
     private String branch;
     private List<String> subjects;
-    private List<FeedbackDTO> feedbacks;
     
     public TeacherDTO() {
     	
@@ -55,13 +55,15 @@ public class TeacherDTO {
 		this.subjects = subjects;
 	}
 
-	public List<FeedbackDTO> getFeedbacks() {
-		return feedbacks;
+	public Long getId() {
+		return id;
 	}
 
-	public void setFeedbacks(List<FeedbackDTO> feedbacks) {
-		this.feedbacks = feedbacks;
+	public void setId(Long id) {
+		this.id = id;
 	}
+
+
     
     
 }
