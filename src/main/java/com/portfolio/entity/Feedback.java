@@ -21,6 +21,18 @@ public class Feedback {
     @JoinColumn(name = "project_id")
     private Project project;     // The project the feedback is for
 
+    public Feedback() {
+    	
+    }
+ 	public Feedback(Long id, String comment, Integer rating, Teacher teacher, Project project) {
+		super();
+		this.id = id;
+		this.comment = comment;
+		this.rating = rating;
+		this.teacher = teacher;
+		this.project = project;
+	}
+
 	public Long getId() {
 		return id;
 	}
