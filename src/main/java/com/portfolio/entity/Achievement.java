@@ -1,87 +1,82 @@
 package com.portfolio.entity;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "achievements")
 public class Achievement {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(nullable = false)
     private String title;
+    
     private String description;
-    private String awardedBy;    // e.g., "Google", "College Name"
-    private String dateReceived; // You can also use LocalDate
-
+    
+    private LocalDateTime dateAchieved;
+    
     @ManyToOne
-    @JoinColumn(name = "portfolio_id")
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
-    
-    
 
-	public Achievement(Long id, String title, String description, String awardedBy, String dateReceived,
-			Portfolio portfolio) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.awardedBy = awardedBy;
-		this.dateReceived = dateReceived;
-		this.portfolio = portfolio;
-	}
-	
-	public Achievement() {
-		
-	}
+    public Achievement() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Achievement(Long id, String title, String description, LocalDateTime dateAchieved, Portfolio portfolio) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateAchieved = dateAchieved;
+        this.portfolio = portfolio;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getAwardedBy() {
-		return awardedBy;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setAwardedBy(String awardedBy) {
-		this.awardedBy = awardedBy;
-	}
+    public LocalDateTime getDateAchieved() {
+        return dateAchieved;
+    }
 
-	public String getDateReceived() {
-		return dateReceived;
-	}
+    public void setDateAchieved(LocalDateTime dateAchieved) {
+        this.dateAchieved = dateAchieved;
+    }
 
-	public void setDateReceived(String dateReceived) {
-		this.dateReceived = dateReceived;
-	}
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
 
-	public Portfolio getPortfolio() {
-		return portfolio;
-	}
-
-	public void setPortfolio(Portfolio portfolio) {
-		this.portfolio = portfolio;
-	}
-    
-    
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 }

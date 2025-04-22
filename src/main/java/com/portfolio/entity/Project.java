@@ -1,105 +1,115 @@
 package com.portfolio.entity;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "projects")
 public class Project {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(nullable = false)
     private String title;
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private String techStack;     // e.g., React, Java, etc.
-    private String githubLink;    // Optional: link to source code
-    private String demoLink;      // Optional: link to live demo
-
+    
+    private String imageUrl;
+    
+    private String projectLink;
+    
     @ManyToOne
-    @JoinColumn(name = "portfolio_id")
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
     
-    @OneToMany(mappedBy = "project")
-    private List<Comment> comments;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
     
-    @OneToMany(mappedBy = "project")
-    private List<Feedback> feedbacks;
-    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
-	public Project(Long id, String title, String description, String techStack, String githubLink, String demoLink,
-			Portfolio portfolio) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.techStack = techStack;
-		this.githubLink = githubLink;
-		this.demoLink = demoLink;
-		this.portfolio = portfolio;
-	}
-	
-	public Project() {
-		
-	}
+    public Project() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Project(Long id, String title, String description, String imageUrl, String projectLink, Portfolio portfolio,
+            LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.projectLink = projectLink;
+        this.portfolio = portfolio;
+        this.createdAt = createdAt;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getTechStack() {
-		return techStack;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setTechStack(String techStack) {
-		this.techStack = techStack;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public String getGithubLink() {
-		return githubLink;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public void setGithubLink(String githubLink) {
-		this.githubLink = githubLink;
-	}
+    public String getProjectLink() {
+        return projectLink;
+    }
 
-	public String getDemoLink() {
-		return demoLink;
-	}
+    public void setProjectLink(String projectLink) {
+        this.projectLink = projectLink;
+    }
 
-	public void setDemoLink(String demoLink) {
-		this.demoLink = demoLink;
-	}
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
 
-	public Portfolio getPortfolio() {
-		return portfolio;
-	}
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 
-	public void setPortfolio(Portfolio portfolio) {
-		this.portfolio = portfolio;
-	}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
     
     
 }
