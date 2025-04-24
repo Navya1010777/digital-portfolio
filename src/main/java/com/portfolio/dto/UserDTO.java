@@ -26,6 +26,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    // create getters and setters
+    
 
 }
