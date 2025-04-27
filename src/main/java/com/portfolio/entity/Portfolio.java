@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -31,15 +34,19 @@ public class Portfolio {
     
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+    @JsonBackReference(value = "user-portfolio")
     private User student;
     
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "portfolio-project")
     private List<Project> projects = new ArrayList<>();
     
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "portfolio-achievement")
     private List<Achievement> achievements = new ArrayList<>();
     
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "portfolio-feedback")
     private List<Feedback> feedbacks = new ArrayList<>();
     
     @Column(name = "created_at")
@@ -49,7 +56,7 @@ public class Portfolio {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-
+    
     public Portfolio() {
     }
 

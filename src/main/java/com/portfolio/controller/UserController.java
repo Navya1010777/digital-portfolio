@@ -48,4 +48,26 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllStudents() {
         return ResponseEntity.ok(userService.getAllStudents());
     }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+    
+    @GetMapping("/student/{username}")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<UserDTO> getStudentByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userService.getStudentByUsername(username));
+    }
+    
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<List<UserDTO>> searchStudents(@RequestParam String query) {
+        return ResponseEntity.ok(userService.searchStudentsByNameOrUsername(query));
+    }
+    
+    @GetMapping("/role")
+    public ResponseEntity<String> getUserRole(Principal principal) {
+        return ResponseEntity.ok(userService.getUserRole(principal.getName()).name());
+    }
 }

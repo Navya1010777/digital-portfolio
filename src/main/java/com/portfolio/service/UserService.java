@@ -58,6 +58,39 @@ public class UserService {
                 .collect(Collectors.toList());
     }
     
+    public UserDTO getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        return mapToDTO(user);
+    }
+    
+    public UserDTO getStudentByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with username: " + username));
+        
+        if (user.getRole() != Role.STUDENT) {
+            throw new ResourceNotFoundException("User with username: " + username + " is not a student");
+        }
+        
+        return mapToDTO(user);
+    }
+    
+    public List<UserDTO> searchStudentsByNameOrUsername(String query) {
+        List<User> students = userRepository.findByRoleAndFullNameContainingIgnoreCaseOrUsernameContainingIgnoreCase(
+                Role.STUDENT, query, query);
+        
+        return students.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+    
+    public Role getUserRole(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                
+        return user.getRole();
+    }
+    
     private UserDTO mapToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
