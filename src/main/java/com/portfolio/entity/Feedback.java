@@ -2,6 +2,8 @@ package com.portfolio.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,10 +23,12 @@ public class Feedback {
     
     @ManyToOne
     @JoinColumn(name = "portfolio_id", nullable = false)
+    @JsonBackReference(value = "portfolio-feedback")
     private Portfolio portfolio;
     
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
+    @JsonBackReference(value = "teacher-feedback")
     private User teacher;
     
     @Column(columnDefinition = "TEXT", nullable = false)

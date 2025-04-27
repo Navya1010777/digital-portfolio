@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.portfolio.dto.AchievementDTO;
 import com.portfolio.entity.Achievement;
+import com.portfolio.mapper.Mapper;
 import com.portfolio.service.AchievementService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,30 +28,45 @@ import lombok.RequiredArgsConstructor;
 public class AchievementController {
     
     private final AchievementService achievementService;
+    private final Mapper mapper;
     
     @PostMapping
-    public ResponseEntity<Achievement> createAchievement(@RequestBody Achievement achievement, 
+    public ResponseEntity<AchievementDTO> createAchievement(@RequestBody AchievementDTO achievementDTO, 
                                                         @RequestParam Long portfolioId,
                                                         Principal principal) {
+        Achievement achievement = new Achievement();
+        achievement.setTitle(achievementDTO.getTitle());
+        achievement.setDescription(achievementDTO.getDescription());
+        achievement.setDateAchieved(achievementDTO.getDateAchieved());
+        
+        Achievement savedAchievement = achievementService.createAchievement(achievement, portfolioId, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(achievementService.createAchievement(achievement, portfolioId, principal.getName()));
+                .body(mapper.toAchievementDTO(savedAchievement));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Achievement> getAchievementById(@PathVariable Long id, Principal principal) {
-        return ResponseEntity.ok(achievementService.getAchievementById(id, principal.getName()));
+    public ResponseEntity<AchievementDTO> getAchievementById(@PathVariable Long id, Principal principal) {
+        Achievement achievement = achievementService.getAchievementById(id, principal.getName());
+        return ResponseEntity.ok(mapper.toAchievementDTO(achievement));
     }
     
     @GetMapping("/portfolio/{portfolioId}")
-    public ResponseEntity<List<Achievement>> getAchievementsByPortfolio(@PathVariable Long portfolioId, Principal principal) {
-        return ResponseEntity.ok(achievementService.getAchievementsByPortfolio(portfolioId, principal.getName()));
+    public ResponseEntity<List<AchievementDTO>> getAchievementsByPortfolio(@PathVariable Long portfolioId, Principal principal) {
+        List<Achievement> achievements = achievementService.getAchievementsByPortfolio(portfolioId, principal.getName());
+        return ResponseEntity.ok(mapper.toAchievementDTOList(achievements));
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Achievement> updateAchievement(@PathVariable Long id, 
-                                                       @RequestBody Achievement achievement, 
+    public ResponseEntity<AchievementDTO> updateAchievement(@PathVariable Long id, 
+                                                       @RequestBody AchievementDTO achievementDTO, 
                                                        Principal principal) {
-        return ResponseEntity.ok(achievementService.updateAchievement(id, achievement, principal.getName()));
+        Achievement achievement = new Achievement();
+        achievement.setTitle(achievementDTO.getTitle());
+        achievement.setDescription(achievementDTO.getDescription());
+        achievement.setDateAchieved(achievementDTO.getDateAchieved());
+        
+        Achievement updatedAchievement = achievementService.updateAchievement(id, achievement, principal.getName());
+        return ResponseEntity.ok(mapper.toAchievementDTO(updatedAchievement));
     }
     
     @DeleteMapping("/{id}")

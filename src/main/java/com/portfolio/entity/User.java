@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,29 +24,33 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false, unique = true)
     private String username;
-
+    
     @Column(nullable = false, unique = true)
     private String email;
-
+    
     @Column(nullable = false)
     private String password;
-
+    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-
+    
     @Column(name = "full_name")
     private String fullName;
-
+    
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "user-portfolio")
     private List<Portfolio> portfolios = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "teacher-feedback")
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     public User() {
     }

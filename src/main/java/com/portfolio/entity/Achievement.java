@@ -1,6 +1,8 @@
 package com.portfolio.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,16 +25,17 @@ public class Achievement {
     
     private String description;
     
-    private LocalDateTime dateAchieved;
+    private LocalDate dateAchieved;
     
     @ManyToOne
     @JoinColumn(name = "portfolio_id", nullable = false)
+    @JsonBackReference(value = "portfolio-achievement")
     private Portfolio portfolio;
 
     public Achievement() {
     }
 
-    public Achievement(Long id, String title, String description, LocalDateTime dateAchieved, Portfolio portfolio) {
+    public Achievement(Long id, String title, String description, LocalDate dateAchieved, Portfolio portfolio) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -64,11 +67,11 @@ public class Achievement {
         this.description = description;
     }
 
-    public LocalDateTime getDateAchieved() {
+    public LocalDate getDateAchieved() {
         return dateAchieved;
     }
 
-    public void setDateAchieved(LocalDateTime dateAchieved) {
+    public void setDateAchieved(LocalDate dateAchieved) {
         this.dateAchieved = dateAchieved;
     }
 

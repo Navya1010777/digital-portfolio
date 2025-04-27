@@ -41,12 +41,21 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         
                         // Student endpoints
-                        .requestMatchers("/api/portfolios/**").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/api/portfolios").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.PUT, "/api/portfolios/{id}").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/portfolios/{id}").hasRole("STUDENT")
                         .requestMatchers("/api/projects/**").hasRole("STUDENT")
                         .requestMatchers("/api/achievements/**").hasRole("STUDENT")
+
+                        // Studnet and Teacher endpoints
+                        .requestMatchers("/api/feedback/portfolio/{portfolioId}").hasAnyRole("STUDENT", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/{id}").hasAnyRole("STUDENT", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/portfolios").hasAnyRole("STUDENT", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/portfolios/{id}").hasAnyRole("STUDENT", "TEACHER")
                         
                         // Teacher endpoints
-                        .requestMatchers("/api/feedback/**").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/api/feedback/{id}").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/feedback/{id}").hasRole("TEACHER")
                         
                         // Shared endpoints
                         .requestMatchers(HttpMethod.GET, "/api/portfolios/{id}").authenticated()

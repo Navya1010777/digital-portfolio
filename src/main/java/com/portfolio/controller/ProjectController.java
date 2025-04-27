@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.portfolio.dto.ProjectDTO;
 import com.portfolio.entity.Project;
+import com.portfolio.mapper.Mapper;
 import com.portfolio.service.ProjectService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,30 +28,47 @@ import lombok.RequiredArgsConstructor;
 public class ProjectController {
     
     private final ProjectService projectService;
+    private final Mapper mapper;
     
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project, 
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO projectDTO, 
                                                  @RequestParam Long portfolioId,
                                                  Principal principal) {
+        Project project = new Project();
+        project.setTitle(projectDTO.getTitle());
+        project.setDescription(projectDTO.getDescription());
+        project.setImageUrl(projectDTO.getImageUrl());
+        project.setProjectLink(projectDTO.getProjectLink());
+        
+        Project savedProject = projectService.createProject(project, portfolioId, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(projectService.createProject(project, portfolioId, principal.getName()));
+                .body(mapper.toProjectDTO(savedProject));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Long id, Principal principal) {
-        return ResponseEntity.ok(projectService.getProjectById(id, principal.getName()));
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id, Principal principal) {
+        Project project = projectService.getProjectById(id, principal.getName());
+        return ResponseEntity.ok(mapper.toProjectDTO(project));
     }
     
     @GetMapping("/portfolio/{portfolioId}")
-    public ResponseEntity<List<Project>> getProjectsByPortfolio(@PathVariable Long portfolioId, Principal principal) {
-        return ResponseEntity.ok(projectService.getProjectsByPortfolio(portfolioId, principal.getName()));
+    public ResponseEntity<List<ProjectDTO>> getProjectsByPortfolio(@PathVariable Long portfolioId, Principal principal) {
+        List<Project> projects = projectService.getProjectsByPortfolio(portfolioId, principal.getName());
+        return ResponseEntity.ok(mapper.toProjectDTOList(projects));
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, 
-                                                @RequestBody Project project, 
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, 
+                                                @RequestBody ProjectDTO projectDTO, 
                                                 Principal principal) {
-        return ResponseEntity.ok(projectService.updateProject(id, project, principal.getName()));
+        Project project = new Project();
+        project.setTitle(projectDTO.getTitle());
+        project.setDescription(projectDTO.getDescription());
+        project.setImageUrl(projectDTO.getImageUrl());
+        project.setProjectLink(projectDTO.getProjectLink());
+        
+        Project updatedProject = projectService.updateProject(id, project, principal.getName());
+        return ResponseEntity.ok(mapper.toProjectDTO(updatedProject));
     }
     
     @DeleteMapping("/{id}")

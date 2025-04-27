@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.portfolio.dto.FeedbackDTO;
 import com.portfolio.entity.Feedback;
+import com.portfolio.mapper.Mapper;
 import com.portfolio.service.FeedbackService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,30 +28,41 @@ import lombok.RequiredArgsConstructor;
 public class FeedbackController {
     
     private final FeedbackService feedbackService;
+    private final Mapper mapper;
     
     @PostMapping
-    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback, 
+    public ResponseEntity<FeedbackDTO> createFeedback(@RequestBody FeedbackDTO feedbackDTO, 
                                                   @RequestParam Long portfolioId,
                                                   Principal principal) {
+        Feedback feedback = new Feedback();
+        feedback.setComment(feedbackDTO.getComment());
+        
+        Feedback savedFeedback = feedbackService.createFeedback(feedback, portfolioId, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(feedbackService.createFeedback(feedback, portfolioId, principal.getName()));
+                .body(mapper.toFeedbackDTO(savedFeedback));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Feedback> getFeedbackById(@PathVariable Long id, Principal principal) {
-        return ResponseEntity.ok(feedbackService.getFeedbackById(id, principal.getName()));
+    public ResponseEntity<FeedbackDTO> getFeedbackById(@PathVariable Long id, Principal principal) {
+        Feedback feedback = feedbackService.getFeedbackById(id, principal.getName());
+        return ResponseEntity.ok(mapper.toFeedbackDTO(feedback));
     }
     
     @GetMapping("/portfolio/{portfolioId}")
-    public ResponseEntity<List<Feedback>> getFeedbackByPortfolio(@PathVariable Long portfolioId, Principal principal) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByPortfolio(portfolioId, principal.getName()));
+    public ResponseEntity<List<FeedbackDTO>> getFeedbackByPortfolio(@PathVariable Long portfolioId, Principal principal) {
+        List<Feedback> feedbacks = feedbackService.getFeedbackByPortfolio(portfolioId, principal.getName());
+        return ResponseEntity.ok(mapper.toFeedbackDTOList(feedbacks));
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Feedback> updateFeedback(@PathVariable Long id, 
-                                                 @RequestBody Feedback feedback, 
+    public ResponseEntity<FeedbackDTO> updateFeedback(@PathVariable Long id, 
+                                                 @RequestBody FeedbackDTO feedbackDTO, 
                                                  Principal principal) {
-        return ResponseEntity.ok(feedbackService.updateFeedback(id, feedback, principal.getName()));
+        Feedback feedback = new Feedback();
+        feedback.setComment(feedbackDTO.getComment());
+        
+        Feedback updatedFeedback = feedbackService.updateFeedback(id, feedback, principal.getName());
+        return ResponseEntity.ok(mapper.toFeedbackDTO(updatedFeedback));
     }
     
     @DeleteMapping("/{id}")
